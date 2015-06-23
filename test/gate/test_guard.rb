@@ -87,4 +87,20 @@ class Gate::TestGuard < Minitest::Test
     refute result.valid?, "Expected #{mu_pp(result)} to be invalid"
     assert_equal expected, result.errors
   end
+
+  def test_coercion_error
+    input = {
+      id: 'Invalid',
+      message: {
+        subject: 'Title'
+      }
+    }
+    expected = {
+      id: :coercion_error
+    }
+
+    result = guard.verify(input)
+    refute result.valid?, "Expected #{mu_pp(result)} to be invalid"
+    assert_equal expected, result.errors
+  end
 end
