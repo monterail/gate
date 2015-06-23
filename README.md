@@ -1,13 +1,12 @@
 # Gate
 
+[![Gem Version](https://badge.fury.io/rb/gate.svg)](http://badge.fury.io/rb/gate)
 [![Circle CI](https://circleci.com/gh/monterail/gate.svg?style=shield)](https://circleci.com/gh/monterail/gate)
 [![Dependency Status](https://gemnasium.com/monterail/gate.svg)](https://gemnasium.com/monterail/gate)
 [![Code Climate](https://codeclimate.com/github/monterail/gate/badges/gpa.svg)](https://codeclimate.com/github/monterail/gate)
 [![Test Coverage](https://codeclimate.com/github/monterail/gate/badges/coverage.svg)](https://codeclimate.com/github/monterail/gate/coverage)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/gate`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Gate is a small library which allows you to define allowed structure for user input with required and optional parameters and to coerce them into defined types.
 
 ## Installation
 
@@ -27,7 +26,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Define structure
+
+```ruby
+gate = Gate.rules do
+  required :id, :Integer
+  required :message do
+    required :title # :String by default
+    optional :value, :Decimal
+  end
+end
+```
+
+Verify it
+
+```ruby
+result = gate.verify(params)
+result.valid? # => true / false
+result.attributes # => hash with only allowed parameters
+result.errors # => hash { key => error }
+```
 
 ## Development
 
