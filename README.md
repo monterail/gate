@@ -2,6 +2,8 @@
 
 [![Circle CI](https://circleci.com/gh/monterail/gate.svg?style=shield)](https://circleci.com/gh/monterail/gate)
 [![Dependency Status](https://gemnasium.com/monterail/gate.svg)](https://gemnasium.com/monterail/gate)
+[![Code Climate](https://codeclimate.com/github/monterail/gate/badges/gpa.svg)](https://codeclimate.com/github/monterail/gate)
+[![Test Coverage](https://codeclimate.com/github/monterail/gate/badges/coverage.svg)](https://codeclimate.com/github/monterail/gate/coverage)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/gate`. To experiment with that code, run `bin/console` for an interactive prompt.
 
