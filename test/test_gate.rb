@@ -5,7 +5,11 @@ class TestGate < Minitest::Test
     refute_nil ::Gate::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_rules
+    rules = Gate.rules do
+      required :example
+    end
+
+    assert_kind_of Gate::Guard, rules
   end
 end
