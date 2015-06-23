@@ -22,10 +22,6 @@ module Gate
       required_set.include?(name)
     end
 
-    def coerce(input)
-      Gate::Guard.new(self).verify(input)
-    end
-
     private
 
     def required(name, type = :String, &block)
