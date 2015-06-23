@@ -27,18 +27,18 @@ module Gate
       end
     end
 
-    def handle(value, name, rule)
+    def handle(input, name, rule)
       if rule.kind_of?(Gate::Configuration)
-        result = Gate::Guard.new(rule).verify(value)
+        result = Gate::Guard.new(rule).verify(input)
         { attributes: { name => result.attributes },
           errors: { name => result.errors } }
       else
-        coerce(value, name, rule)
+        coerce(input, name, rule)
       end
     end
 
-    def coerce(value, name, rule)
-      { attributes: { name => rule.coerce(value) } }
+    def coerce(input, name, rule)
+      { attributes: { name => rule.coerce(input) } }
     rescue CoercionError
       # TODO: log error
       { errors: { name => :coercion_error } }
