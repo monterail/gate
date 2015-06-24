@@ -25,18 +25,14 @@ module Gate
     private
 
     def _errors(hash)
-      hash.reduce({}) do |result, (k, v)|
-        if v.kind_of?(Hash)
+      hash.each_with_object({}) do |(k, v), result|
+        if v.is_a?(Hash)
           nested = _errors(v)
 
-          if nested.any?
-            result[k] = nested
-          end
+          result[k] = nested if nested.any?
         else
           result[k] = v
         end
-
-        result
       end
     end
   end

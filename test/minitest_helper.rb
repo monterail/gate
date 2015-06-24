@@ -1,7 +1,7 @@
-require 'codeclimate-test-reporter'
+require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'gate'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "gate"
 
-require 'minitest/autorun'
+require "minitest/autorun"

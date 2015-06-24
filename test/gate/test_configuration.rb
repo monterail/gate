@@ -1,64 +1,67 @@
-require 'minitest_helper'
+require "minitest_helper"
 
-class Gate::TestConfiguration < Minitest::Test
-  def test_empty_configuration
-    gate = Gate::Configuration.new() {}
-
-    assert_kind_of Gate::Configuration, gate
-    assert_empty gate.required_set
-    assert_empty gate.optional_set
-    assert_empty gate.nested_set
-    assert_empty gate.rules
-  end
-
-  def test_setup_with_block
-    gate = Gate::Configuration.new do
-      required :req
-      optional :opt
-
-      required :nested do
-        required :test
+module Gate
+  class TestConfiguration < Minitest::Test
+    def test_empty_configuration
+      gate = Gate::Configuration.new do
       end
+
+      assert_kind_of Gate::Configuration, gate
+      assert_empty gate.required_set
+      assert_empty gate.optional_set
+      assert_empty gate.nested_set
+      assert_empty gate.rules
     end
 
-    assert_required gate, :req
-    assert_optional gate, :opt
+    def test_setup_with_block
+      gate = Gate::Configuration.new do
+        required :req
+        optional :opt
 
-    assert_required gate, :nested
-    assert_nested gate, :nested
+        required :nested do
+          required :test
+        end
+      end
 
-    assert_required gate.rules[:nested], :test
-  end
+      assert_required gate, :req
+      assert_optional gate, :opt
 
-  def assert_required(gate, obj, msg = nil)
-    msg = message(msg) {
-      "Expected #{mu_pp(gate)} to register required #{mu_pp(obj)}"
-    }
-    assert_registered_param(gate, obj)
-    assert gate.required_set.include?(obj), msg
-  end
+      assert_required gate, :nested
+      assert_nested gate, :nested
 
-  def assert_optional(gate, obj, msg = nil)
-    msg = message(msg) {
-      "Expected #{mu_pp(gate)} to register optional #{mu_pp(obj)}"
-    }
-    assert_registered_param(gate, obj)
-    assert gate.optional_set.include?(obj), msg
-  end
+      assert_required gate.rules[:nested], :test
+    end
 
-  def assert_nested(gate, obj, msg = nil)
-    msg = message(msg) {
-      "Expected #{mu_pp(gate)} to register nested #{mu_pp(obj)}"
-    }
-    assert_registered_param(gate, obj)
-    assert gate.nested_set.include?(obj), msg
-  end
+    def assert_required(gate, obj, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(gate)} to register required #{mu_pp(obj)}"
+      end
+      assert_registered_param(gate, obj)
+      assert gate.required_set.include?(obj), msg
+    end
 
-  def assert_registered_param(gate, obj, msg = nil)
-    msg = message(msg) {
-      "Expected #{mu_pp(gate)} to register #{mu_pp(obj)}"
-    }
-    assert_kind_of Gate::Configuration, gate
-    assert gate.rules.include?(obj), msg
+    def assert_optional(gate, obj, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(gate)} to register optional #{mu_pp(obj)}"
+      end
+      assert_registered_param(gate, obj)
+      assert gate.optional_set.include?(obj), msg
+    end
+
+    def assert_nested(gate, obj, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(gate)} to register nested #{mu_pp(obj)}"
+      end
+      assert_registered_param(gate, obj)
+      assert gate.nested_set.include?(obj), msg
+    end
+
+    def assert_registered_param(gate, obj, msg = nil)
+      msg = message(msg) do
+        "Expected #{mu_pp(gate)} to register #{mu_pp(obj)}"
+      end
+      assert_kind_of Gate::Configuration, gate
+      assert gate.rules.include?(obj), msg
+    end
   end
 end

@@ -16,7 +16,7 @@ module Gate
 
     def _verify(input, name, rule, result)
       case
-      when input.has_key?(name)
+      when input.key?(name)
         coerced = handle(input[name], name, rule)
         update(result, coerced)
       when configuration.required?(name)
@@ -28,7 +28,7 @@ module Gate
     end
 
     def handle(input, name, rule)
-      if rule.kind_of?(Gate::Configuration)
+      if rule.is_a?(Gate::Configuration)
         result = Gate::Guard.new(rule).verify(input)
         { attributes: { name => result.attributes },
           errors: { name => result.errors } }

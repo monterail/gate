@@ -1,7 +1,9 @@
 module Gate
   class Coercer
     def initialize(engine, type)
-      raise CoercionError, "Doesn't know how to coerce into #{type}" unless Axiom::Types.const_defined?(type)
+      unless Axiom::Types.const_defined?(type)
+        fail CoercionError, "Doesn't know how to coerce into #{type}"
+      end
 
       @engine = engine
       @type = type
