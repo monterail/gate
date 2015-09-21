@@ -8,10 +8,16 @@ module Gate
 
     def test_coerce_boolean_true
       assert coercer_for(:Boolean).coerce("yes")
+      assert coercer_for(:Boolean).coerce(true)
     end
 
     def test_coerce_boolean_false
       refute coercer_for(:Boolean).coerce("no")
+      refute coercer_for(:Boolean).coerce(false)
+    end
+
+    def test_coerce_array
+      assert_equal [1, 2, 3] ,coercer_for(:Array).coerce([1, 2, 3])
     end
 
     def test_unknown_type
