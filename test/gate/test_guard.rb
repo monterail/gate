@@ -12,6 +12,10 @@ module Gate
         optional :nested do
           required :value
         end
+        optional :zero, allow_nil: true
+        optional :box, allow_nil: true do
+          required :size
+        end
       end
     end
 
@@ -24,7 +28,9 @@ module Gate
         id: "1",
         message: { subject: "Title", value: "12.50" },
         nested: { value: "ok" },
-        additional: { ignore: "true" }
+        additional: { ignore: "true" },
+        zero: "0",
+        box: { size: "10" }
       }
     end
 
@@ -33,6 +39,18 @@ module Gate
         id: "1",
         message: { subject: "Title" }
       }
+    end
+
+    def nil_input
+      short_input.merge(zero: nil)
+    end
+
+    def nested_nil_input
+      short_input.merge(box: nil)
+    end
+
+    def invalid_nil_input
+      short_input.merge(id: nil)
     end
 
     def missing_required
@@ -54,7 +72,9 @@ module Gate
       expected = {
         id: 1,
         message: { subject: "Title", value: BigDecimal.new("12.50") },
-        nested: { value: "ok" }
+        nested: { value: "ok" },
+        zero: "0",
+        box: { size: "10" }
       }
 
       result = guard.verify(full_input)
@@ -71,6 +91,40 @@ module Gate
       result = guard.verify(short_input)
       assert result.valid?, "Expected #{mu_pp(result)} to be valid"
       assert_equal expected, result.attributes
+    end
+
+    def test_valid_nil_input
+      expected = {
+        id: 1,
+        message: { subject: "Title" },
+        zero: nil
+      }
+
+      result = guard.verify(nil_input)
+      assert result.valid?, "Expected #{mu_pp(result)} to be valid"
+      assert_equal expected, result.attributes
+    end
+
+    def test_valid_nested_nil_input
+      expected = {
+        id: 1,
+        message: { subject: "Title" },
+        box: nil
+      }
+
+      result = guard.verify(nested_nil_input)
+      assert result.valid?, "Expected #{mu_pp(result)} to be valid"
+      assert_equal expected, result.attributes
+    end
+
+    def test_invalid_nil_input
+      expected = {
+        id: :nil_not_allowed
+      }
+
+      result = guard.verify(invalid_nil_input)
+      refute result.valid?, "Expected #{mu_pp(result)} to be invalid"
+      assert_equal expected, result.errors
     end
 
     def test_missing_nested_required

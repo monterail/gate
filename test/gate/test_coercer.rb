@@ -34,8 +34,14 @@ module Gate
       assert_equal message, error.message
     end
 
-    def coercer_for(type)
-      Gate::Coercer.new(coerce_engine, type)
+    def test_allowed_nil
+      assert coercer_for(:String, true).allow_nil?
+      refute coercer_for(:String, false).allow_nil?
+      refute coercer_for(:String).allow_nil?
+    end
+
+    def coercer_for(type, allow_nil = false)
+      Gate::Coercer.new(coerce_engine, type, allow_nil: allow_nil)
     end
 
     def coerce_engine

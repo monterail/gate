@@ -47,6 +47,19 @@ result.attributes # => hash with only allowed parameters
 result.errors # => hash { key => error }
 ```
 
+If you need to handle `nil` values you can use `allow_nil` flag:
+
+```ruby
+gate = Gate.rules do
+  required :id, :Integer, allow_nil: true
+  required :message, allow_nil: true do
+    required :title
+    optional :value, :Decimal
+  end
+end
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.

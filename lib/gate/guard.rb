@@ -28,10 +28,11 @@ module Gate
     end
 
     def handle(input, name, rule)
-      if rule.is_a?(Gate::Configuration)
-        result = Gate::Guard.new(rule).verify(input)
-        { attributes: { name => result.attributes },
-          errors: { name => result.errors } }
+      case
+      when input.nil?
+        coerce_nil(name, rule)
+      when rule.is_a?(Gate::Configuration)
+        coerce_nested(input, name, rule)
       else
         coerce(input, name, rule)
       end
@@ -42,6 +43,20 @@ module Gate
     rescue CoercionError
       # TODO: log error
       { errors: { name => :coercion_error } }
+    end
+
+    def coerce_nested(input, name, rule)
+      result = Gate::Guard.new(rule).verify(input)
+      { attributes: { name => result.attributes },
+        errors: { name => result.errors } }
+    end
+
+    def coerce_nil(name, rule)
+      if rule.allow_nil?
+        { attributes: { name => nil } }
+      else
+        { errors: { name => :nil_not_allowed } }
+      end
     end
 
     def update(result, attributes: {}, errors: {})
