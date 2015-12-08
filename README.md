@@ -34,6 +34,7 @@ gate = Gate.rules do
   required :message do
     required :title # :String by default
     optional :value, :Decimal
+    optional :anything, :Any # Just pass through original value
   end
 end
 ```
