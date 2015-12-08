@@ -59,6 +59,17 @@ gate = Gate.rules do
 end
 ```
 
+## Types
+
+When your param has to support more then one type of data you can use type `Any`
+
+```ruby
+gate = Gate.rules do
+  required :address, :Any, allow_nil: true
+end
+```
+
+Input can be whatever e.g.: `address: 'abc'` or `address: { city: 'abc', country: 'def' }`
 
 ## Development
 

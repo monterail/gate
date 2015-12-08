@@ -28,7 +28,7 @@ module Gate
     end
 
     def test_unknown_type
-      error = assert_raises(Gate::CoercionError) { coercer_for(:Unknown) }
+      error = assert_raises(Gate::CoercionError) { coercer_for(:Unknown).send(:coercion_method) }
       assert_equal "Doesn't know how to coerce into Unknown", error.message
     end
 
