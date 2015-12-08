@@ -1,6 +1,10 @@
 module Gate
   class Coercer
     def initialize(engine, type, allow_nil: false)
+      unless coercible?(type)
+        fail CoercionError, "Doesn't know how to coerce into #{type}"
+      end
+
       @engine = engine
       @type = type
       @allow_nil = allow_nil
@@ -20,6 +24,10 @@ module Gate
 
     attr_reader :engine, :type
 
+    def coercible?(type)
+      type == :Any or Axiom::Types.const_defined?(type)
+    end
+
     def detect_input_type(input)
       case input
       when TrueClass, FalseClass, Array, Hash, Any
@@ -30,13 +38,9 @@ module Gate
     end
 
     def coercion_method
-      if type == :Any
-        "to_any"
-      elsif Axiom::Types.const_defined?(type)
-        Axiom::Types.const_get(type).coercion_method
-      else
-        fail CoercionError, "Doesn't know how to coerce into #{type}"
-      end
+      return :to_any if type == :Any
+
+      Axiom::Types.const_get(type).coercion_method
     end
   end
 end
