@@ -8,9 +8,9 @@ module Gate
 
     def test_coerce_any
       assert_equal "o Hai", coercer_for(:Any).coerce("o Hai")
-      assert_equal [1, 2, 3] ,coercer_for(:Any).coerce([1, 2, 3])
-      assert_equal false ,coercer_for(:Any).coerce(false)
-      assert_equal true ,coercer_for(:Any).coerce(true)
+      assert_equal [1, 2, 3], coercer_for(:Any).coerce([1, 2, 3])
+      assert_equal false, coercer_for(:Any).coerce(false)
+      assert_equal true, coercer_for(:Any).coerce(true)
     end
 
     def test_coerce_boolean_true

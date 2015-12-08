@@ -4,7 +4,6 @@ module Gate
       @engine = engine
       @type = type
       @allow_nil = allow_nil
-      @coercion_method = set_coercion_method
     end
 
     def coerce(input)
@@ -19,7 +18,7 @@ module Gate
 
     private
 
-    attr_reader :engine, :type, :coercion_method
+    attr_reader :engine, :type
 
     def detect_input_type(input)
       case input
@@ -30,7 +29,7 @@ module Gate
       end
     end
 
-    def set_coercion_method
+    def coercion_method
       if type == :Any
         "to_any"
       elsif Axiom::Types.const_defined?(type)
