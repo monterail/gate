@@ -14,6 +14,7 @@ require "forwardable"
 require "set"
 
 require "gate/coercer"
+require "gate/coercer/any"
 require "gate/configuration"
 require "gate/guard"
 require "gate/result"
