@@ -22,6 +22,9 @@ class TestGate < Minitest::Test
       required :complex, allow_nil: true do
         optional :blank, :Boolean, allow_nil: true
       end
+      required :data, :Any
+      optional :address, :Any
+      optional :child, :Any, allow_nil: true
     end
 
     input = {
@@ -29,7 +32,10 @@ class TestGate < Minitest::Test
       enabled: true,
       default: "text",
       value: nil,
-      complex: nil
+      complex: nil,
+      data: 'text',
+      address: { street: 'Abc', city: 'Cba' },
+      child: true
     }
 
     expected = {
@@ -37,7 +43,10 @@ class TestGate < Minitest::Test
       enabled: true,
       default: "text",
       value: nil,
-      complex: nil
+      complex: nil,
+      data: 'text',
+      address: { street: 'Abc', city: 'Cba' },
+      child: true
     }
 
     result = rules.verify(input)
