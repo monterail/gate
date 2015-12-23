@@ -16,6 +16,7 @@ class TestGate < Minitest::Test
   def test_all_features
     rules = Gate.rules do
       required :id, :Integer
+      required :number, :Integer
       required :enabled, :Boolean
       required :default
       optional :value, allow_nil: true
@@ -29,6 +30,7 @@ class TestGate < Minitest::Test
 
     input = {
       id: "1",
+      number: 2,
       enabled: true,
       default: "text",
       value: nil,
@@ -40,6 +42,7 @@ class TestGate < Minitest::Test
 
     expected = {
       id: 1,
+      number: 2,
       enabled: true,
       default: "text",
       value: nil,

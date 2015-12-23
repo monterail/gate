@@ -1,5 +1,7 @@
 module Gate
   class Coercer
+    PRIMITIVES = [TrueClass, FalseClass, Array, Hash, Numeric]
+
     def initialize(engine, type, allow_nil: false)
       unless coercible?(type)
         fail CoercionError, "Doesn't know how to coerce into #{type}"
@@ -30,7 +32,7 @@ module Gate
 
     def detect_input_type(input)
       case input
-      when TrueClass, FalseClass, Array, Hash, Any
+      when *PRIMITIVES, Any
         input.class
       else
         String
