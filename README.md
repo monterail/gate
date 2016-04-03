@@ -8,7 +8,7 @@
 
 Gate is a small library which allows you to define allowed structure for user input with required and optional parameters and to coerce them into defined types.
 
-** Gem is no longer maintaned!! **
+**Gem is no longer maintaned!!**
 
 If you're looking for a flexible input verification and validation please take a look at [dry-rb](https://github.com/dry-rb) gems like [dry-validation](https://github.com/dry-rb/dry-validation).
 
