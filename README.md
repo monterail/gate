@@ -6,11 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/monterail/gate/badges/gpa.svg)](https://codeclimate.com/github/monterail/gate)
 [![Test Coverage](https://codeclimate.com/github/monterail/gate/badges/coverage.svg)](https://codeclimate.com/github/monterail/gate/coverage)
 
-Gate is a small library which allows you to define allowed structure for user input with required and optional parameters and to coerce them into defined types.
-
-**Gem is no longer maintaned!!**
-
-If you're looking for a flexible input verification and validation please take a look at [dry-rb](https://github.com/dry-rb) gems like [dry-validation](https://github.com/dry-rb/dry-validation).
+Gate is a small wrapper on [dry-validation](http://dry-rb.org/gems/dry-validation/) that might be used as Command in CQRS pattern. It will raise `InvalidCommand` error for invalid input and provide simple struct with access to coerced input.
 
 ## Installation
 
@@ -33,37 +29,30 @@ Or install it yourself as:
 Define structure
 
 ```ruby
-gate = Gate.rules do
-  required :id, :Integer
-  required :message do
-    required :title # :String by default
-    optional :value, :Decimal
-    optional :anything, :Any # Just pass through original value
+class DoSomethingCommand
+  include Gate::Command
+
+  schema do
+    required(:id).filled
+    required(:message).schema do
+      required(:title).filled
+      optional(:value).maybe(:decimal?)
+    end
   end
 end
 ```
 
-Verify it
+Use it
 
 ```ruby
-result = gate.verify(params)
-result.valid? # => true / false
-result.attributes # => hash with only allowed parameters
-result.errors # => hash { key => error }
-```
-
-If you need to handle `nil` values you can use `allow_nil` flag:
-
-```ruby
-gate = Gate.rules do
-  required :id, :Integer, allow_nil: true
-  required :message, allow_nil: true do
-    required :title
-    optional :value, :Decimal
-  end
+begin
+  cmd = DoSomethingCommand.with(params)
+  cmd.id
+  cmd.message
+rescue DoSomethingCommand::InvalidCommand => e
+  e.errors # => hash { key => [errors] }
 end
 ```
-
 
 ## Development
 

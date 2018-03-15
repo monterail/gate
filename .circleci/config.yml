@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5.0
+    steps:
+      - checkout
+      - run: gem install bundler
+      - run: bundle exec rake
