@@ -1,8 +1,6 @@
-engines:
+version: 2
+plugins:
   rubocop:
     enabled: true
   bundler-audit:
     enabled: true
-ratings:
-  paths:
-    - "lib/**"
