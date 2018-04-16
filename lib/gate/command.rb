@@ -3,6 +3,8 @@ module Gate
     SchemaAlreadyRegistered = Class.new(StandardError)
     SchemaNotDefined = Class.new(StandardError)
 
+    attr_reader :result
+
     class InvalidCommand < StandardError
       attr_reader :errors
 
@@ -10,11 +12,14 @@ module Gate
         @errors = errors
         super("Invalid command")
       end
+
+      def full_message
+        errors.values.join(", ")
+      end
     end
 
     def self.included(base)
       base.send(:extend, ClassMethods)
-      base.send(:attr_reader, :result)
     end
 
     def initialize(data)
@@ -24,7 +29,7 @@ module Gate
     module ClassMethods
       def schema(&block)
         if block_given?
-          raise SchemaAlreadyRegistered if @schema
+          raise SchemaAlreadyRegistered if instance_variable_defined?(:@schema)
           @schema = Dry::Validation.Form(&block)
           @schema.rules.keys.each do |name|
             define_method(name) do
@@ -39,7 +44,7 @@ module Gate
 
       def with(input)
         result = schema.(input)
-        raise InvalidCommand, result.messages if result.failure?
+        raise InvalidCommand, result.messages(full: true) if result.failure?
         new result.output
       end
     end
