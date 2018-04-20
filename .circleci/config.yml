@@ -24,7 +24,12 @@ jobs:
       - image: circleci/ruby:2.5
     steps:
       - checkout
-      - run: bundle config gem.push_key ${BUNDLE_GEM__PUSH_KEY}
+      - run:
+          name: Configure rubygems
+          command: |
+            mkdir ~/.gem
+            echo "---\n:rubygems_api_key: ${BUNDLE_GEM__PUSH_KEY}" > ~/.gem/credentials
+            chmod 0600 ~/.gem/credentials
       - run: bundle install
       - run: bundle exec rake release
 
