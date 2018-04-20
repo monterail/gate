@@ -1,5 +1,11 @@
+require "forwardable"
+
 module Gate
   module Command
+    extend Forwardable
+
+    def_delegator :result, :to_h
+
     SchemaAlreadyRegistered = Class.new(StandardError)
     SchemaNotDefined = Class.new(StandardError)
 

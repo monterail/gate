@@ -19,6 +19,7 @@ module Gate
       assert_equal cmd.number, 5
       assert_equal cmd.string, "abc"
       assert_equal cmd.null, "string"
+      assert_equal cmd.to_h, number: 5, string: "abc", null: "string"
     end
 
     def test_incomplete_command
@@ -27,6 +28,7 @@ module Gate
       assert_equal cmd.number, 5
       assert_equal cmd.string, "abc"
       assert_nil cmd.null
+      assert_equal cmd.to_h, number: 5, string: "abc"
     end
 
     def test_invalid_command
