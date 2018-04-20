@@ -30,7 +30,7 @@ jobs:
             mkdir ~/.gem
             cat .circleci/gem_credentials | sed -e "s/__RUBYGEMS_API_KEY__/${RUBYGEMS_API_KEY}/" > ~/.gem/credentials
             chmod 0600 ~/.gem/credentials
-      - run: bundle config gem.push_key rubygems_api_key
+      - run: bundle config gem.push_key rubygems
       - run: bundle install
       - run: bundle exec rake release
       - run: shred -u ~/.gem/credentials
