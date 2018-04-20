@@ -23,12 +23,6 @@ jobs:
     docker:
       - image: circleci/ruby:2.5
     steps:
-      - run:
-          name: Authenticate rubygems
-          command: |
-            mkdir ~/.gem
-            echo "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}" > ~/.gem/credentials
-            chmod 0600 ~/.gem/credentials
       - checkout
       - run: bundle install
       - run: bundle exec rake release
