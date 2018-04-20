@@ -1,10 +1,52 @@
+build_steps: &build_steps
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run: bundle install
+    - run: bundle exec rake
+
 version: 2
 jobs:
-  build:
+  test_ruby-2.3:
+    <<: *build_steps
     docker:
-      - image: circleci/ruby:2.5.0
+      - image: circleci/ruby:2.3
+  test_ruby-2.4:
+    <<: *build_steps
+    docker:
+      - image: circleci/ruby:2.4
+  test_ruby-2.5:
+    <<: *build_steps
+    docker:
+      - image: circleci/ruby:2.5
+  release:
+    docker:
+      - image: circleci/ruby:2.5
     steps:
+      - run:
+          name: Authenticate rubygems
+          command: |
+            mkdir "~/.gem"
+            echo "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}" > ~/.gem/credentials
+            chmod 0600 ~/.gem/credentials
       - checkout
-      - run: gem install bundler
       - run: bundle install
-      - run: bundle exec rake
+      - run: bundle exec rake release
+
+workflows:
+  version: 2
+  test_and_release:
+    jobs:
+      - test_ruby-2.3
+      - test_ruby-2.4
+      - test_ruby-2.5
+      - release:
+          requires:
+            - test_ruby-2.3
+            - test_ruby-2.4
+            - test_ruby-2.5
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
