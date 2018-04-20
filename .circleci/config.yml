@@ -38,17 +38,17 @@ workflows:
   test_and_release:
     jobs:
       - test_ruby-2.3:
-        filters:
-          tags:
-            only: /.*/
+          filters:
+            tags:
+              only: /.*/
       - test_ruby-2.4:
-        filters:
-          tags:
-            only: /.*/
+          filters:
+            tags:
+              only: /.*/
       - test_ruby-2.5:
-        filters:
-          tags:
-            only: /.*/
+          filters:
+            tags:
+              only: /.*/
       - release:
           requires:
             - test_ruby-2.3
