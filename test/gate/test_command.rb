@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class ExampleCommand
@@ -12,7 +14,6 @@ end
 
 module Gate
   class TestCommand < Minitest::Test
-
     def test_full_command
       cmd = ExampleCommand.with(number: "5", string: "abc", "null" => "string")
 
@@ -36,7 +37,7 @@ module Gate
 
       assert false, "InvalidCommand should be raised"
     rescue ExampleCommand::InvalidCommand => e
-      assert_equal e.errors, { number: ["number is missing"] }
+      assert_equal e.errors, number: ["number is missing"]
     end
 
     def test_invalid_full_message
