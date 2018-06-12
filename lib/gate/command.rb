@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 
 module Gate
@@ -33,10 +35,11 @@ module Gate
     end
 
     module ClassMethods
+      # rubocop:disable Metrics/MethodLength
       def schema(&block)
         if block_given?
           raise SchemaAlreadyRegistered if instance_variable_defined?(:@schema)
-          @schema = Dry::Validation.Form(&block)
+          @schema = Dry::Validation.Params(&block)
           @schema.rules.keys.each do |name|
             define_method(name) do
               result[name]
@@ -47,9 +50,10 @@ module Gate
           @schema
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       def with(input)
-        result = schema.(input)
+        result = schema.call(input)
         raise InvalidCommand, result.messages(full: true) if result.failure?
         new result.output
       end
