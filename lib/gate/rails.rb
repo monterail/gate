@@ -11,26 +11,44 @@ module Gate
     end
 
     module ClassMethods
-      attr_reader :schemas
+      mattr_accessor :params_schemas, default: {}
 
-      def def_validation(name, &block)
-        @schemas ||= {}
-        @schemas[name] = Dry::Validation.Params(&block)
+      def fetch_params_schema(schema_name)
+        params_schemas.fetch(schema_name) do
+          raise SchemaNotDefined, "Missing `#{schema_name}` schema"
+        end
+      end
+
+      def def_schema(&block)
+        @_schema = Dry::Validation.Params(&block)
+      end
+
+      def method_added(method_name)
+        return unless @_schema
+
+        params_schemas[method_name] = @_schema
+        @_schema = nil
       end
     end
 
-    def validate_action
-      result = action_params_schema.call(request.params)
+    def validate_params
+      result = params_schema.call(request.params)
 
       return if result.success?
 
       head :bad_request
     end
 
-    def action_params_schema
-      self.class.schemas.fetch(action_name.to_sym) do
-        raise SchemaNotDefined, action_name
-      end
+    def params_schema_registered?
+      self.class.params_schemas.key?(params_schema_name)
+    end
+
+    def params_schema
+      self.class.fetch_params_schema(params_schema_name)
+    end
+
+    def params_schema_name
+      action_name.to_sym
     end
   end
 end

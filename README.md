@@ -6,7 +6,9 @@
 [![Code Climate](https://codeclimate.com/github/monterail/gate/badges/gpa.svg)](https://codeclimate.com/github/monterail/gate)
 [![Test Coverage](https://codeclimate.com/github/monterail/gate/badges/coverage.svg)](https://codeclimate.com/github/monterail/gate/coverage)
 
-Gate is a small wrapper on [dry-validation](http://dry-rb.org/gems/dry-validation/) that might be used as Command in CQRS pattern. It will raise `InvalidCommand` error for invalid input and provide simple struct with access to coerced input.
+Gate is a small wrapper on [dry-validation](http://dry-rb.org/gems/dry-validation/) that might be used as Command in CQRS pattern or replace [Strong Params](http://api.rubyonrails.org/classes/ActionController/Parameters.html) in [Ruby on Rails](https://rubyonrails.org/) applications.
+
+`Gate::Command` will raise `InvalidCommand` error for invalid input and provide simple struct with access to coerced input.
 
 ## Installation
 
@@ -24,7 +26,7 @@ Or install it yourself as:
 
     $ gem install gate
 
-## Usage
+## Command Usage
 
 Define structure
 
@@ -53,6 +55,45 @@ rescue DoSomethingCommand::InvalidCommand => e
   e.errors # => hash { key => [errors] }
 end
 ```
+
+## Rails Usage
+
+Define structure
+
+```ruby
+class ExampleController < ActionController::Base
+  include Gate::Rails
+
+  before_action :validate_params, if: { |c| c.params_schema_registered? }
+
+  # Define schema just before action method
+  def_schema do
+    required(:id).filled
+    required(:message).schema do
+      required(:title).filled
+      optional(:value).maybe(:decimal?)
+    end
+  end
+
+  def foo
+    # you can access Dry::Validation result with:
+    validated_params
+  end
+end
+```
+
+Use it
+
+```ruby
+begin
+  cmd = DoSomethingCommand.with(params)
+  cmd.id
+  cmd.message
+rescue DoSomethingCommand::InvalidCommand => e
+  e.errors # => hash { key => [errors] }
+end
+```
+
 
 ## Development
 
