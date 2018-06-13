@@ -39,8 +39,12 @@ module Gate
       if result.success?
         @validated_params = result.output
       else
-        head :bad_request
+        handle_invalid_params(result.messages)
       end
+    end
+
+    def handle_invalid_params(_errors)
+      head :bad_request
     end
 
     def params_schema_registered?

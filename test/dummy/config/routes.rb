@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   get :with_validation, to: "application#with_validation"
   get :without_validation, to: "application#without_validation"
   get :with_error, to: "application#with_error"
+
+  get :with_custom_invalid, to: "invalid#with_custom_invalid"
 end

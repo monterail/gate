@@ -79,6 +79,13 @@ class ExampleController < ActionController::Base
     # you can access Dry::Validation result with:
     validated_params
   end
+
+  # default handler for invalid params which you can override
+  def handle_invalid_params(_errors)
+    # errors is Dry::Validation messages hash
+
+    head :bad_request
+  end
 end
 ```
 

@@ -11,7 +11,7 @@ module Gate
       assert_equal @response.body, { foo: "FOO", bar: nil }.inspect
     end
 
-    def test_invalid_params
+    def test_default_invalid_params
       get "/with_validation", params: { "bar" => "BAR" }
 
       assert_response :bad_request
@@ -29,6 +29,13 @@ module Gate
       assert false, "SchemaNotDefined should be raised"
     rescue Gate::Rails::SchemaNotDefined => e
       assert_equal e.message, "Missing `with_error` schema"
+    end
+
+    def test_custom_invalid_params
+      get "/with_custom_invalid", params: { "bar" => "BAR" }
+
+      assert_response :bad_request
+      assert_equal @response.body, { foo: ["is missing"] }.inspect
     end
   end
 end
