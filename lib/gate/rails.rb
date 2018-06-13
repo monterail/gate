@@ -4,6 +4,8 @@ require "pry"
 
 module Gate
   module Rails
+    attr_reader :validated_params
+
     SchemaNotDefined = Class.new(StandardError)
 
     def self.included(base)
@@ -34,9 +36,11 @@ module Gate
     def validate_params
       result = params_schema.call(request.params)
 
-      return if result.success?
-
-      head :bad_request
+      if result.success?
+        @validated_params = result.output
+      else
+        head :bad_request
+      end
     end
 
     def params_schema_registered?

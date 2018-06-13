@@ -8,6 +8,7 @@ module Gate
       get "/with_validation", params: { "foo" => "FOO", "bar" => "" }
 
       assert_response :success
+      assert_equal @response.body, { foo: "FOO", bar: nil }.inspect
     end
 
     def test_invalid_params

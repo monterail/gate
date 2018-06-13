@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def with_validation
-    head :ok
+    render plain: validated_params.inspect
   end
 
   def without_validation
