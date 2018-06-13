@@ -58,7 +58,7 @@ end
 
 ## Rails Usage
 
-Define structure
+Define schemas per action
 
 ```ruby
 class ExampleController < ActionController::Base
@@ -81,19 +81,6 @@ class ExampleController < ActionController::Base
   end
 end
 ```
-
-Use it
-
-```ruby
-begin
-  cmd = DoSomethingCommand.with(params)
-  cmd.id
-  cmd.message
-rescue DoSomethingCommand::InvalidCommand => e
-  e.errors # => hash { key => [errors] }
-end
-```
-
 
 ## Development
 
