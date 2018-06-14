@@ -13,7 +13,9 @@ module Gate
     end
 
     module ClassMethods
-      mattr_accessor :params_schemas, default: {}
+      def params_schemas
+        @params_schemas ||= {}
+      end
 
       def fetch_params_schema(schema_name)
         params_schemas.fetch(schema_name) do
@@ -26,10 +28,10 @@ module Gate
       end
 
       def method_added(method_name)
-        return unless @_schema
+        return unless instance_variable_defined?(:@_schema)
 
         params_schemas[method_name] = @_schema
-        @_schema = nil
+        remove_instance_variable(:@_schema)
       end
     end
 
