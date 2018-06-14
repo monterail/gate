@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class InvalidController < ApplicationController
-  include Gate::Rails
-
   before_action :validate_params, if: lambda { |c|
     c.params_schema_registered?
   }

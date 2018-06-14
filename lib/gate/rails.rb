@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "pry"
-
 module Gate
   module Rails
     attr_reader :validated_params
