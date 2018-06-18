@@ -26,5 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "codeclimate-test-reporter", "~> 1.0"
   spec.add_development_dependency "minitest", "~> 5.11"
   spec.add_development_dependency "pry", "~> 0.11"
+  spec.add_development_dependency "rails", "~> 5.2"
   spec.add_development_dependency "rake", "~> 12.0"
 end
