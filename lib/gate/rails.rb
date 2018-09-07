@@ -5,9 +5,14 @@ module Gate
     attr_reader :validated_params
 
     SchemaNotDefined = Class.new(StandardError)
+    @base_schema = nil
 
     def self.included(base)
       base.send(:extend, ClassMethods)
+    end
+
+    def self.configure(&block)
+      @base_schema = Class.new(Dry::Validation::Schema, &block)
     end
 
     module ClassMethods
@@ -22,7 +27,7 @@ module Gate
       end
 
       def def_schema(&block)
-        @_schema = Dry::Validation.Params(&block)
+        @_schema = Dry::Validation.Params(Gate::Rails::instance_variable_get(:@base_schema), &block)
       end
 
       def method_added(method_name)
