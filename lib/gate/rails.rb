@@ -10,6 +10,11 @@ module Gate
       base.send(:extend, ClassMethods)
     end
 
+    def self.configure(&block)
+      dynamic_class = "BaseSchema"
+      Object.const_set(dynamic_class, Class.new(Dry::Validation::Schema, &block))
+    end
+
     module ClassMethods
       def params_schemas
         @params_schemas ||= {}
@@ -22,7 +27,7 @@ module Gate
       end
 
       def def_schema(&block)
-        @_schema = Dry::Validation.Params(&block)
+        @_schema = Dry::Validation.Params(BaseSchema, &block)
       end
 
       def method_added(method_name)
