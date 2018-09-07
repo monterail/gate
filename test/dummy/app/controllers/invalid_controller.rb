@@ -6,7 +6,7 @@ class InvalidController < ApplicationController
   }
 
   def_schema do
-    required(:foo).filled
+    required(:foo).filled(:foo?)
   end
 
   def with_custom_invalid

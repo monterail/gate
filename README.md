@@ -89,6 +89,50 @@ class ExampleController < ActionController::Base
 end
 ```
 
+## Configuration
+
+Gate gives a possibility to create global, inherited configuration and separated setup in each one schema definition.
+
+### Inheriting base setup
+
+In order to configure the library according to the whole application, create a file under `config/initializers/gate.rb`. There is a possibility of creating a base configuration, defining shared, custom predicates and a lot more useful things. The full list of supported configuration options is consistent with available options in [dry-validation](https://dry-rb.org/gems/dry-validation/) gem.
+
+```ruby
+Gate::Rails.configure do
+  configure do |config|
+    config.messages_file = Rails.root.join("config", "locales" "en.yml")
+
+    predicates(SharedPredicates)
+
+    def foo?(value)
+      value == "FOO"
+    end
+  end
+end
+```
+
+### Separated setup
+
+Sometimes there is a requirement to have a very specific configuration or behaviour in a one schema validation. The easiest way is to do it in a special `configure` block.
+
+```ruby
+class DoSomethingCommand
+  include Gate::Command
+
+  schema do
+    configure do
+      config.messages_file = Rails.root.join("config", "locales" "special_en.yml")
+      predicates(SharedPredicates)
+    end
+    required(:id).filled
+    required(:message).schema do
+      required(:title).filled
+      optional(:value).maybe(:decimal?)
+    end
+  end
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
