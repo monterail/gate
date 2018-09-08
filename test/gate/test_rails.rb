@@ -35,7 +35,14 @@ module Gate
       get "/with_custom_invalid", params: { "bar" => "BAR" }
 
       assert_response :bad_request
-      assert_equal @response.body, { foo: ["is missing"] }.inspect
+      assert_equal @response.body, { foo: ["is missing", "it's not a foo!"] }.inspect
+    end
+
+    def test_base_configuration
+      get "/with_custom_invalid", params: { "foo" => "FOO1" }
+
+      assert_response :bad_request
+      assert_equal @response.body, { foo: ["it's not a foo!"]  }.inspect
     end
   end
 end
