@@ -1,0 +1,3 @@
+en:
+  errors:
+    foo?: "it's not a foo!"
