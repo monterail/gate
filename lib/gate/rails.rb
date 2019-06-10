@@ -2,44 +2,39 @@
 
 module Gate
   module Rails
-    attr_reader :validated_params
+    attr_reader :validated_contracts
 
-    SchemaNotDefined = Class.new(StandardError)
-    @base_schema = nil
+    ContractNotDefined = Class.new(StandardError)
 
     def self.included(base)
       base.send(:extend, ClassMethods)
     end
 
-    def self.configure(&block)
-      @base_schema = Class.new(Dry::Validation::Schema, &block)
-    end
-
     module ClassMethods
-      def params_schemas
-        @params_schemas ||= {}
+      def _contracts
+        @_contracts ||= {}
       end
 
-      def fetch_params_schema(schema_name)
-        params_schemas.fetch(schema_name) do
-          raise SchemaNotDefined, "Missing `#{schema_name}` schema"
+      def contract_for(contract_name)
+        _contracts.fetch(contract_name) do
+          raise ContractNotDefined, "Missing `#{contract_name}` contract"
         end
       end
 
-      def def_schema(&block)
-        @_schema = Dry::Validation.Params(Gate::Rails::instance_variable_get(:@base_schema), &block)
+      def contract(&block)
+        @_contract = Dry::Validation.Contract(&block)
       end
 
       def method_added(method_name)
-        return unless instance_variable_defined?(:@_schema)
+        return unless instance_variable_defined?(:@_contract)
 
-        params_schemas[method_name] = @_schema
-        remove_instance_variable(:@_schema)
+        _contracts[method_name] = @_contract
+        remove_instance_variable(:@_contract)
       end
     end
 
     def validate_params
-      result = params_schema.call(request.params)
+      result = self.class.contract_for(_contract_name).call(request.params)
 
       if result.success?
         @validated_params = result.output
@@ -52,15 +47,11 @@ module Gate
       head :bad_request
     end
 
-    def params_schema_registered?
-      self.class.params_schemas.key?(params_schema_name)
+    def contract_registered?
+      self.class._contracts.key?(_schema_name)
     end
 
-    def params_schema
-      self.class.fetch_params_schema(params_schema_name)
-    end
-
-    def params_schema_name
+    def _contract_name
       action_name.to_sym
     end
   end

@@ -2,10 +2,10 @@
 
 class InvalidController < ApplicationController
   before_action :validate_params, if: lambda { |c|
-    c.params_schema_registered?
+    c.contract_registered?
   }
 
-  def_schema do
+  contract do
     required(:foo).filled(:foo?)
   end
 

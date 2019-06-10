@@ -2,12 +2,12 @@
 
 class ValidController < ApplicationController
   before_action :validate_params, if: lambda { |c|
-    c.params_schema_registered? || c.action_name == "with_error"
+    c.contract_registered? || c.action_name == "with_error"
   }
 
-  def_schema do
+  contract do
     required(:foo).filled
-    optional(:bar).maybe
+    optional(:bar).maybe(:string)
   end
 
   def with_validation
