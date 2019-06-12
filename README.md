@@ -31,7 +31,7 @@ Define contract per action with controller DSL...
 class ExampleController < ActionController::Base
   include Gate::Rails
 
-  before_action :validate_params, if: { |c| c.params_contract_registered? }
+  before_action :verify_contract, if: { |c| c.contract_registered? }
 
   # Define contract just before action method
   contract do
@@ -74,7 +74,7 @@ end
 class ExampleController < ActionController::Base
   include Gate::Rails
 
-  before_action :validate_params, if: { |c| c.params_contract_registered? }
+  before_action :verify_contract, if: { |c| c.contract_registered? }
 
   contract(ExampleFooContract)
   def foo

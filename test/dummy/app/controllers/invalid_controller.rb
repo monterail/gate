@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InvalidController < ApplicationController
-  before_action :validate_params, if: lambda { |c|
+  before_action :verify_contract, if: lambda { |c|
     c.contract_registered?
   }
 

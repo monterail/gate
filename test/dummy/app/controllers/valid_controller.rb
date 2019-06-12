@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ValidController < ApplicationController
-  before_action :validate_params, if: lambda { |c|
+  before_action :verify_contract, if: lambda { |c|
     c.contract_registered? || c.action_name == "with_error"
   }
 

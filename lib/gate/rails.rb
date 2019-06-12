@@ -35,7 +35,7 @@ module Gate
       end
     end
 
-    def validate_params
+    def verify_contract
       result = self.class.contract_for(_contract_name).call(request.params)
 
       if result.success?
