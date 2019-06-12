@@ -35,10 +35,12 @@ class ExampleController < ActionController::Base
 
   # Define schema just before action method
   contract do
-    required(:id).filled
-    required(:message).hash do
-      required(:title).filled
-      optional(:value).maybe(:decimal?)
+    params do
+      required(:id).filled
+      required(:message).hash do
+        required(:title).filled
+        optional(:value).maybe(:decimal?)
+      end
     end
   end
 
