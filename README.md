@@ -25,7 +25,7 @@ Or install it yourself as:
 
 ## Usage
 
-Define contract per action with controller DSL...
+Define [contract](https://dry-rb.org/gems/dry-validation) per action with controller DSL...
 
 ```ruby
 class ExampleController < ActionController::Base
