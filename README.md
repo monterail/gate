@@ -34,7 +34,7 @@ class ExampleController < ActionController::Base
   before_action :verify_contract, if: { |c| c.contract_registered? }
 
   # Define contract just before action method
-  contract do
+  contract(handler: :handle_invalid_params) do
     params do
       required(:id).filled
       required(:message).hash do
@@ -49,7 +49,7 @@ class ExampleController < ActionController::Base
     claimed_params
   end
 
-  # default handler for invalid params which you can override
+  # handler for invalid params
   def handle_invalid_params(_errors)
     # errors is Dry::Validation messages hash
 
@@ -80,6 +80,13 @@ class ExampleController < ActionController::Base
   def foo
     # you can access Dry::Validation result with:
     claimed_params
+  end
+
+  # just use default handler
+  def handle_invalid_params(_errors)
+    # errors is Dry::Validation messages hash
+
+    head :bad_request
   end
 end
 ```
