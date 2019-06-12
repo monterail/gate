@@ -18,11 +18,20 @@ module Gate
       def contract_for(contract_name)
         _contracts.fetch(contract_name) do
           raise ContractNotDefined, "Missing `#{contract_name}` contract"
-        end
+        end.fetch(:contract)
       end
 
-      def contract(klass = nil, &block)
-        @_contract = klass ? klass.new : Dry::Validation.Contract(&block)
+      def handler_for(contract_name)
+        _contracts.fetch(contract_name) do
+          raise ContractNotDefined, "Missing `#{contract_name}` contract"
+        end.fetch(:handler)
+      end
+
+      def contract(klass = nil, handler: :handle_invalid_params, &block)
+        @_contract = {
+          contract: klass ? klass.new : Dry::Validation.Contract(&block),
+          handler: handler,
+        }
       end
 
       def method_added(method_name)
@@ -41,7 +50,7 @@ module Gate
       if result.success?
         @claimed_params = result.to_h
       else
-        handle_invalid_params(result.errors.to_h)
+        send(self.class.handler_for(_contract_name), result.errors.to_h)
       end
     end
 

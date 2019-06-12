@@ -44,5 +44,12 @@ module Gate
       assert_response :bad_request
       assert_equal @response.body, {foo: ["is missing"]}.inspect
     end
+
+    def test_custom_handler
+      get "/with_custom_handler", params: {"bar" => "BAR"}
+
+      assert_response :bad_request
+      assert_equal @response.body, "handled"
+    end
   end
 end

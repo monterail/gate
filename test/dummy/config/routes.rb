@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   get :with_error, to: "valid#with_error"
 
   get :with_custom_invalid, to: "invalid#with_custom_invalid"
+  get :with_custom_handler, to: "invalid#with_custom_handler"
 end
