@@ -6,7 +6,9 @@ class InvalidController < ApplicationController
   }
 
   contract do
-    required(:foo).filled(:foo?)
+    params do
+      required(:foo).filled(:string)
+    end
   end
 
   def with_custom_invalid

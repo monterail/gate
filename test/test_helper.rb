@@ -10,5 +10,6 @@ require "gate"
 
 require_relative "../test/dummy/config/environment"
 require "rails/test_help"
+require "pry"
 
 require "minitest/autorun"

@@ -6,8 +6,10 @@ class ValidController < ApplicationController
   }
 
   contract do
-    required(:foo).filled
-    optional(:bar).maybe(:string)
+    params do
+      required(:foo).filled
+      optional(:bar).maybe(:string)
+    end
   end
 
   def with_validation

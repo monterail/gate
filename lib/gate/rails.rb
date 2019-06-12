@@ -2,7 +2,7 @@
 
 module Gate
   module Rails
-    attr_reader :validated_contracts
+    attr_reader :validated_params
 
     ContractNotDefined = Class.new(StandardError)
 
@@ -26,10 +26,12 @@ module Gate
       end
 
       def method_added(method_name)
-        return unless instance_variable_defined?(:@_contract)
+        if instance_variable_defined?(:@_contract)
+          _contracts[method_name] = @_contract
+          remove_instance_variable(:@_contract)
+        end
 
-        _contracts[method_name] = @_contract
-        remove_instance_variable(:@_contract)
+        super
       end
     end
 
@@ -37,9 +39,9 @@ module Gate
       result = self.class.contract_for(_contract_name).call(request.params)
 
       if result.success?
-        @validated_params = result.output
+        @validated_params = result.to_h
       else
-        handle_invalid_params(result.messages)
+        handle_invalid_params(result.errors.to_h)
       end
     end
 
@@ -48,7 +50,7 @@ module Gate
     end
 
     def contract_registered?
-      self.class._contracts.key?(_schema_name)
+      self.class._contracts.key?(_contract_name)
     end
 
     def _contract_name
