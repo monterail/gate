@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class InvalidController < ApplicationController
-  before_action :validate_params, if: lambda { |c|
-    c.params_schema_registered?
+  before_action :verify_contract, if: lambda { |c|
+    c.contract_registered?
   }
 
-  def_schema do
-    required(:foo).filled(:foo?)
+  contract do
+    params do
+      required(:foo).filled(:string)
+    end
   end
 
   def with_custom_invalid

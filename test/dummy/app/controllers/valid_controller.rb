@@ -1,17 +1,25 @@
 # frozen_string_literal: true
 
 class ValidController < ApplicationController
-  before_action :validate_params, if: lambda { |c|
-    c.params_schema_registered? || c.action_name == "with_error"
+  before_action :verify_contract, if: lambda { |c|
+    c.contract_registered? || c.action_name == "with_error"
   }
 
-  def_schema do
-    required(:foo).filled
-    optional(:bar).maybe
+  contract do
+    params do
+      required(:foo).filled
+      optional(:bar).maybe(:string)
+    end
   end
 
   def with_validation
-    render plain: validated_params.inspect
+    render plain: claimed_params.inspect
+  end
+
+  contract(ValidWithClassValidationContract)
+
+  def with_class_validation
+    render plain: claimed_params.inspect
   end
 
   def without_validation

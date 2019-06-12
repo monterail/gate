@@ -7,10 +7,6 @@ build_steps: &build_steps
 
 version: 2
 jobs:
-  test_ruby-2.3:
-    <<: *build_steps
-    docker:
-      - image: circleci/ruby:2.3
   test_ruby-2.4:
     <<: *build_steps
     docker:
@@ -19,9 +15,13 @@ jobs:
     <<: *build_steps
     docker:
       - image: circleci/ruby:2.5
+  test_ruby-2.6:
+    <<: *build_steps
+    docker:
+      - image: circleci/ruby:2.6
   release:
     docker:
-      - image: circleci/ruby:2.5
+      - image: circleci/ruby:2.6
     steps:
       - checkout
       - run:
@@ -39,10 +39,6 @@ workflows:
   version: 2
   test_and_release:
     jobs:
-      - test_ruby-2.3:
-          filters:
-            tags:
-              only: /.*/
       - test_ruby-2.4:
           filters:
             tags:
@@ -51,11 +47,15 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test_ruby-2.6:
+          filters:
+            tags:
+              only: /.*/
       - release:
           requires:
-            - test_ruby-2.3
             - test_ruby-2.4
             - test_ruby-2.5
+            - test_ruby-2.6
           filters:
             tags:
               only: /^v.*/

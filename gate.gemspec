@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Jan Dudulski"]
   spec.email = ["jan@dudulski.pl"]
 
-  spec.summary = "CQRS Command"
+  spec.summary = "Strong params replacement"
   spec.description = "Validate and coerce user input against defined structure."
   spec.homepage = "https://github.com/monterail/gate"
   spec.license = "MIT"
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
-  spec.add_runtime_dependency "dry-validation", "~> 0.12"
+  spec.add_runtime_dependency "dry-validation", "~> 1.0"
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 1.0"
@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry", "~> 0.11"
   spec.add_development_dependency "rails", "~> 5.2"
   spec.add_development_dependency "rake", "~> 12.0"
+  spec.add_development_dependency "standardrb", ">= 1.0"
 end
