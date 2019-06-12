@@ -13,13 +13,13 @@ class ValidController < ApplicationController
   end
 
   def with_validation
-    render plain: validated_params.inspect
+    render plain: claimed_params.inspect
   end
 
   contract(ValidWithClassValidationContract)
 
   def with_class_validation
-    render plain: validated_params.inspect
+    render plain: claimed_params.inspect
   end
 
   def without_validation

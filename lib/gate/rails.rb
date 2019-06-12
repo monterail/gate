@@ -2,7 +2,7 @@
 
 module Gate
   module Rails
-    attr_reader :validated_params
+    attr_reader :claimed_params
 
     ContractNotDefined = Class.new(StandardError)
 
@@ -39,7 +39,7 @@ module Gate
       result = self.class.contract_for(_contract_name).call(request.params)
 
       if result.success?
-        @validated_params = result.to_h
+        @claimed_params = result.to_h
       else
         handle_invalid_params(result.errors.to_h)
       end

@@ -46,7 +46,7 @@ class ExampleController < ActionController::Base
 
   def foo
     # you can access Dry::Validation result with:
-    validated_params
+    claimed_params
   end
 
   # default handler for invalid params which you can override
@@ -79,7 +79,7 @@ class ExampleController < ActionController::Base
   contract(ExampleFooContract)
   def foo
     # you can access Dry::Validation result with:
-    validated_params
+    claimed_params
   end
 end
 ```
