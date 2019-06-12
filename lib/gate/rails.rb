@@ -21,8 +21,8 @@ module Gate
         end
       end
 
-      def contract(&block)
-        @_contract = Dry::Validation.Contract(&block)
+      def contract(klass = nil, &block)
+        @_contract = klass ? klass.new : Dry::Validation.Contract(&block)
       end
 
       def method_added(method_name)

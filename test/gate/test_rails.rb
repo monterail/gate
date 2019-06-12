@@ -4,8 +4,15 @@ require "test_helper"
 
 module Gate
   class RailsTest < ActionDispatch::IntegrationTest
-    def test_valid_params
+    def test_hook_with_valid_params
       get "/with_validation", params: {"foo" => "FOO", "bar" => ""}
+
+      assert_response :success
+      assert_equal @response.body, {foo: "FOO", bar: nil}.inspect
+    end
+
+    def test_class_with_valid_params
+      get "/with_class_validation", params: {"foo" => "FOO", "bar" => ""}
 
       assert_response :success
       assert_equal @response.body, {foo: "FOO", bar: nil}.inspect

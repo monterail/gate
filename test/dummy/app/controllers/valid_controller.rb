@@ -16,6 +16,12 @@ class ValidController < ApplicationController
     render plain: validated_params.inspect
   end
 
+  contract(ValidWithClassValidationContract)
+
+  def with_class_validation
+    render plain: validated_params.inspect
+  end
+
   def without_validation
     head :ok
   end

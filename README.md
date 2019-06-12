@@ -25,15 +25,15 @@ Or install it yourself as:
 
 ## Usage
 
-Define contract per action
+Define contract per action with controller DSL...
 
 ```ruby
 class ExampleController < ActionController::Base
   include Gate::Rails
 
-  before_action :validate_params, if: { |c| c.params_schema_registered? }
+  before_action :validate_params, if: { |c| c.params_contract_registered? }
 
-  # Define schema just before action method
+  # Define contract just before action method
   contract do
     params do
       required(:id).filled
@@ -54,6 +54,32 @@ class ExampleController < ActionController::Base
     # errors is Dry::Validation messages hash
 
     head :bad_request
+  end
+end
+```
+
+... or as a separate class:
+
+```ruby
+class ExampleFooContract < Dry::Validation::Contract
+  params do
+    required(:id).filled
+    required(:message).hash do
+      required(:title).filled
+      optional(:value).maybe(:decimal?)
+    end
+  end
+end
+
+class ExampleController < ActionController::Base
+  include Gate::Rails
+
+  before_action :validate_params, if: { |c| c.params_contract_registered? }
+
+  contract(ExampleFooContract)
+  def foo
+    # you can access Dry::Validation result with:
+    validated_params
   end
 end
 ```
